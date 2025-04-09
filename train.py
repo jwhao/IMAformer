@@ -254,27 +254,7 @@ def train(train_loader,params,model,optimizer,loss_fn,epoch_index):
         # query = query.reshape(-1,c,h,w)
         # query = query.cuda()
 
-        # ---------图像组合--------------
         
-        #--------方法2：将support取50%，query填充其掩码部分，互补拼接-----------
-        # query_patch = patchify(query)          # torch.Size([75, 196, 768])
-        # support_patch = patchify(support)  
-        # imags = random_compose(query_patch,support_patch)
-        # query_patch, _, _ = random_masking(query_patch)         # torch.Size([75, 98, 768])
-        # support_patch, _, _ = random_masking(support_patch)
-        # # print(query_patch.shape)
-        # # print(support_patch.shape)
-        # imags = torch.cat((query_patch.unsqueeze(1).repeat(1,params.train_n_way*params.n_shot,1,1), support_patch.unsqueeze(0).repeat(params.train_n_way*params.n_query,1,1,1)), dim=2)
-        # # print(imags.shape)
-        # imags = imags.reshape(-1,imags.shape[2],imags.shape[3])
-        # imags = unpatchify(imags)
-        # print(imags.shape)
-        # label = torch.eq(q_values.unsqueeze(1).repeat(1,params.train_n_way*params.n_shot),cache_values.unsqueeze(0).repeat(params.train_n_way*params.n_query,1)).type(torch.float32)
-        # label = label.reshape(-1)
-        # label = torch.zeros(params.val_n_way*params.train_n_way*params.train_n_way)
-        # positive = [n*5 for n in [6*num for num in range(5)]]
-        # # label[0::params.val_n_way*params.train_n_way] = 1
-        # label[positive] = 1
         label = np.repeat(range(params.val_n_way),params.n_query)
         label = torch.from_numpy(np.array(label))
         label = label.cuda()
@@ -356,27 +336,7 @@ def validate(val_loader,params,model,epoch_index,best_prec1,loss_fn):
         # query = query.reshape(-1,c,h,w)
         # query = query.cuda()
 
-        # ---------图像组合--------------
-        
-        #--------方法2：将support取50%，query填充其掩码部分，互补拼接-----------
-        # query_patch = patchify(query)          # torch.Size([75, 196, 768])
-        # support_patch = patchify(support)  
-        # imags = random_compose(query_patch,support_patch)
-        # query_patch, _, _ = random_masking(query_patch)         # torch.Size([75, 98, 768])
-        # support_patch, _, _ = random_masking(support_patch)
-        # # print(query_patch.shape)
-        # # print(support_patch.shape)
-        # imags = torch.cat((query_patch.unsqueeze(1).repeat(1,params.train_n_way*params.n_shot,1,1), support_patch.unsqueeze(0).repeat(params.train_n_way*params.n_query,1,1,1)), dim=2)
-        # # print(imags.shape)
-        # imags = imags.reshape(-1,imags.shape[2],imags.shape[3])
-        # imags = unpatchify(imags)
-        # print(imags.shape)
-        # label = torch.eq(q_values.unsqueeze(1).repeat(1,params.train_n_way*params.n_shot),cache_values.unsqueeze(0).repeat(params.train_n_way*params.n_query,1)).type(torch.float32)
-        # label = label.reshape(-1)
-        # label = torch.zeros(params.val_n_way*params.train_n_way*params.train_n_way)
-        # positive = [n*5 for n in [6*num for num in range(5)]]
-        # # label[0::params.val_n_way*params.train_n_way] = 1
-        # label[positive] = 1
+       
         label = np.repeat(range(params.val_n_way),params.n_query)
         label = torch.from_numpy(np.array(label))
         label = label.cuda()
